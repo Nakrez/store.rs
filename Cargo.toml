@@ -1,0 +1,19 @@
+[package]
+name = "store"
+version = "0.1.0"
+authors = ["Baptiste Covolato <b.covolato@gmail.com>"]
+description = "In-memory database"
+readme = "README.md"
+license = "MIT"
+
+[lib]
+
+name = "store"
+path = "src/lib.rs"
+
+[[bin]]
+
+name = "store-bin"
+path = "src/main.rs"
+
+[dependencies]
