@@ -17,3 +17,5 @@ name = "store-bin"
 path = "src/main.rs"
 
 [dependencies]
+serde = "0.8"
+serde_macros = "0.8"
