@@ -1,0 +1,27 @@
+language: rust
+rust:
+    - nightly
+
+os:
+    - linux
+    - osx
+
+before_install:
+    npm install --save-dev travis-after-all
+
+script:
+    cargo test
+
+after_success:
+    - |
+        declare exitCode;
+        $(npm bin)/travis-after-all
+        exitCode=$?
+        [ $exitCode -eq 0 ] &&
+        [ $TRAVIS_BRANCH = master ] &&
+        [ $TRAVIS_PULL_REQUEST = false ] &&
+        cargo doc &&
+        echo "<meta http-equiv=refresh content=0;url=store/index.html>" > target/doc/index.html &&
+        sudo pip install ghp-import &&
+        ghp-import -n target/doc &&
+        git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
