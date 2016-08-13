@@ -18,6 +18,7 @@ path = "src/main.rs"
 
 [dependencies]
 serde = "0.8"
+docopt = "0.6.82"
 serde_macros = "0.8"
 clippy = {version = "*", optional = true}
 
