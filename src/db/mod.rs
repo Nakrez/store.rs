@@ -2,6 +2,8 @@
 
 use std::collections::HashMap;
 
+pub mod path;
+
 pub type Data = Vec<u8>;
 
 struct Node {
@@ -17,5 +19,9 @@ impl Database {
         Database {
             data: HashMap::new(),
         }
+    }
+
+    pub fn get<T: path::IntoPath>(&self, key: T) {
+        let _path = key.into_path();
     }
 }
