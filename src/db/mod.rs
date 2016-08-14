@@ -2,6 +2,9 @@
 
 use std::collections::HashMap;
 
+#[cfg(test)]
+mod test;
+
 pub mod path;
 
 pub type Data = Vec<u8>;

@@ -5,6 +5,7 @@
 
 #![feature(custom_derive, plugin)]
 
+#![cfg_attr(test, plugin(stainless))]
 #![plugin(serde_macros)]
 
 mod db;
