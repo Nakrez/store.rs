@@ -1,4 +1,4 @@
-describe! stainless {
+describe! store_db {
     before_each {
         use env_logger;
 
@@ -7,6 +7,17 @@ describe! stainless {
         let _ = env_logger::init();
 
         let mut db = db::Database::new();
+    }
+
+    it "initial_state" {
+        // Root user has no password
+        assert!(db.get("/system/users/root/password") == Ok("".into()));
+
+        // Root is in the root group
+        assert!(db.exists("/system/groups/root/root").is_ok());
+
+        // Root is in the users group
+        assert!(db.exists("/system/groups/users/root").is_ok());
     }
 
     it "basic_get" {

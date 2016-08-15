@@ -27,9 +27,8 @@ pub struct Node {
 }
 
 impl Node {
-    /// Create a new node of the data base
-    #[allow(new_without_default)]
-    pub fn new() -> Self {
+    /// Create a new empty directory node
+    pub fn empty_dir() -> Self {
         Node {
             content: NodeContent::Dir(Directory::new()),
         }
@@ -58,10 +57,10 @@ impl Node {
 pub struct NodePtr(Arc<RefCell<Node>>);
 
 impl NodePtr {
-    /// Create a new shareable pointer to a new node
-    #[allow(new_without_default)]
-    pub fn new() -> Self {
-        NodePtr(Arc::new(RefCell::new(Node::new())))
+    /// Create a new shareable pointer over a node that contains an empty
+    /// directory.
+    pub fn empty_dir() -> Self {
+        NodePtr(Arc::new(RefCell::new(Node::empty_dir())))
     }
 
     /// Create a shareable pointer to an existing data

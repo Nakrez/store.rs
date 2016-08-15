@@ -17,13 +17,32 @@ impl Database {
     /// Create a new empty data base
     #[allow(new_without_default)]
     pub fn new() -> Database {
-        Database {
-            root: NodePtr::new(),
-        }
-    }
-}
+        let mut db = Database {
+            root: NodePtr::empty_dir(),
+        };
 
-impl Database {
+        // Create user/group internal data
+        db.mkdir("/", "system").unwrap();
+        db.mkdir("/system", "users").unwrap();
+        db.mkdir("/system", "groups").unwrap();
+
+        // Create the root user
+        db.mkdir("/system/users", "root").unwrap();
+
+        // Create users and root groups
+        db.mkdir("/system/groups", "root").unwrap();
+        db.mkdir("/system/groups", "users").unwrap();
+
+        // Set an empty password for root
+        db.set("/system/users/root", "password", "").unwrap();
+
+        // Add root to the root and users groups
+        db.set("/system/groups/root", "root", "").unwrap();
+        db.set("/system/groups/users", "root", "").unwrap();
+
+        db
+    }
+
     /// Resolve one part of the path
     fn resolve_one_part(&self, node: NodePtr, key: DataRef) -> Result<NodePtr, ()> {
         let i_node = node.node();
@@ -122,7 +141,7 @@ impl Database {
     /// Create a directory named `dir` in `path`
     pub fn mkdir<T, U>(&mut self, path: T, dir: U) -> Result<(), ()>
                        where T: path::IntoPath, U: Into<Data> {
-        let node = Node::new();
+        let node = Node::empty_dir();
 
         self.insert(path, dir, node)
     }
