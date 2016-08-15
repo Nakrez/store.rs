@@ -1,3 +1,5 @@
+#![cfg_attr(test, allow(unused_mut))]
+
 describe! store_db {
     before_each {
         use env_logger;
@@ -60,6 +62,37 @@ describe! store_db {
         assert!(db.get("/a/b/c/d") == Ok("value".into()));
     }
 
-    after_each {
+    bench "get_base" (bencher) {
+        use db;
+
+        let mut db = db::Database::new();
+        db.set("/", "a", "test").unwrap();
+
+        bencher.iter(|| db.get("/a"))
+    }
+
+    bench "exists_base" (bencher) {
+        use db;
+
+        let mut db = db::Database::new();
+        db.set("/", "a", "test").unwrap();
+
+        bencher.iter(|| db.exists("/a"));
+    }
+
+    bench "set_base" (bencher) {
+        use db;
+
+        let mut db = db::Database::new();
+
+        bencher.iter(|| db.set("/", "a", "test"))
+    }
+
+    bench "mkdir_base" (bencher) {
+        use db;
+
+        let mut db = db::Database::new();
+
+        bencher.iter(|| db.mkdir("/", "a"))
     }
 }

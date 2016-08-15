@@ -10,7 +10,8 @@ before_install:
     npm install --save-dev travis-after-all
 
 script:
-    cargo test --features clippy
+    - cargo test --features clippy
+    - cargo bench --features clippy
 
 after_success:
     - |
