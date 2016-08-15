@@ -35,6 +35,13 @@ impl Node {
         }
     }
 
+    /// Create a node from binary data
+    pub fn from_data(data: Data) -> Self {
+        Node {
+            content: NodeContent::Binary(data),
+        }
+    }
+
     /// Returns the content of the node
     pub fn content(&self) -> &NodeContent {
         &self.content
@@ -55,6 +62,11 @@ impl NodePtr {
     #[allow(new_without_default)]
     pub fn new() -> Self {
         NodePtr(Arc::new(RefCell::new(Node::new())))
+    }
+
+    /// Create a shareable pointer to an existing data
+    pub fn from_node(node: Node) -> Self {
+        NodePtr(Arc::new(RefCell::new(node)))
     }
 
     /// Get the internal node

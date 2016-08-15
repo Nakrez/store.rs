@@ -1,7 +1,7 @@
 //! Actual implementation of the Database
 
 use self::path::PathPart;
-use self::data::{NodePtr, NodeContent, Data, DataRef};
+use self::data::{Node, NodePtr, NodeContent, Data, DataRef};
 
 #[cfg(test)]
 mod test;
@@ -69,6 +69,41 @@ impl Database {
         match *b_i_node.content() {
             NodeContent::Binary(ref data) => Ok(data.clone()),
             NodeContent::Dir(_) => Err(()),
+        }
+    }
+
+    /// Set a binary value in the data base
+    ///
+    /// path: The path you want to add a value to (must be a directory)
+    /// key: The entry you want to add to the directory
+    /// data: The data corresponding to the key
+    ///
+    /// return: Ok if the insertion succeeded, Err otherwise
+    pub fn set<T, U>(&self, path: T, key: U, data: U) -> Result<(), ()>
+                     where T: path::IntoPath, U: Into<Data> {
+        let node = try!(self.resolve_path(path));
+        let i_node = node.node();
+        let mut b_i_node = i_node.borrow_mut();
+
+        match *b_i_node.content_mut() {
+            NodeContent::Binary(_) => Err(()),
+            NodeContent::Dir(ref mut dir) => {
+                let key = key.into();
+
+                if dir.contains_key(&key) {
+                    return Err(());
+                }
+
+                let node = Node::from_data(data.into());
+                let n_ptr = NodePtr::from_node(node);
+
+                if dir.insert(key, n_ptr).is_some() {
+                    // XXX: Should we assert ? Or print a log ?
+                    Err(())
+                } else {
+                    Ok(())
+                }
+            }
         }
     }
 }
