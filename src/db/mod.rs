@@ -56,6 +56,34 @@ impl Database {
         res
     }
 
+    /// Insert a new node in a path
+    fn insert<T, U>(&mut self, path: T, key: U, node: Node) -> Result<(), ()>
+                    where T: path::IntoPath, U: Into<Data> {
+        let cur = try!(self.resolve_path(path));
+        let i_cur = cur.node();
+        let mut b_i_cur = i_cur.borrow_mut();
+
+        match *b_i_cur.content_mut() {
+            NodeContent::Binary(_) => Err(()),
+            NodeContent::Dir(ref mut dir) => {
+                let key = key.into();
+
+                if dir.contains_key(&key) {
+                    return Err(());
+                }
+
+                let n_ptr = NodePtr::from_node(node);
+
+                if dir.insert(key, n_ptr).is_some() {
+                    warn!("BUG ? insert(): insert returned some");
+                    Err(())
+                } else {
+                    Ok(())
+                }
+            }
+        }
+    }
+
     /// Get a value from the database
     ///
     /// The path you want to get a value from (must be a data)
@@ -81,34 +109,21 @@ impl Database {
     /// return: Ok if the insertion succeeded, Err otherwise
     pub fn set<T, U>(&mut self, path: T, key: U, data: U) -> Result<(), ()>
                      where T: path::IntoPath, U: Into<Data> {
-        let node = try!(self.resolve_path(path));
-        let i_node = node.node();
-        let mut b_i_node = i_node.borrow_mut();
+        let node = Node::from_data(data.into());
 
-        match *b_i_node.content_mut() {
-            NodeContent::Binary(_) => Err(()),
-            NodeContent::Dir(ref mut dir) => {
-                let key = key.into();
-
-                if dir.contains_key(&key) {
-                    return Err(());
-                }
-
-                let node = Node::from_data(data.into());
-                let n_ptr = NodePtr::from_node(node);
-
-                if dir.insert(key, n_ptr).is_some() {
-                    warn!("BUG ? set(): insert returned some");
-                    Err(())
-                } else {
-                    Ok(())
-                }
-            }
-        }
+        self.insert(path, key, node)
     }
 
     /// Returns true if a `path` exists.
     pub fn exists<T: path::IntoPath>(&self, path: T) -> Result<(), ()> {
         self.resolve_path(path).map(|_| ())
+    }
+
+    /// Create a directory named `dir` in `path`
+    pub fn mkdir<T, U>(&mut self, path: T, dir: U) -> Result<(), ()>
+                       where T: path::IntoPath, U: Into<Data> {
+        let node = Node::new();
+
+        self.insert(path, dir, node)
     }
 }

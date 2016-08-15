@@ -21,6 +21,7 @@ describe! stainless {
     }
 
     it "basic_set" {
+        assert!(db.get("/non_exist").is_err());
         assert!(db.set("/", "non_exist", "yes").is_ok());
         assert!(db.get("/non_exist").is_ok());
     }
@@ -29,6 +30,23 @@ describe! stainless {
         assert!(db.exists("/non_exist").is_err());
         assert!(db.set("/", "non_exist", "yes").is_ok());
         assert!(db.exists("/non_exist").is_ok());
+    }
+
+    it "basic_mkdir" {
+        assert!(db.exists("/a").is_err());
+        assert!(db.mkdir("/", "a").is_ok());
+        assert!(db.exists("/a").is_ok());
+
+        assert!(db.exists("/a/b").is_err());
+        assert!(db.mkdir("/a", "b").is_ok());
+        assert!(db.exists("/a/b").is_ok());
+
+        assert!(db.exists("/a/b/c").is_err());
+        assert!(db.mkdir("/a/b", "c").is_ok());
+        assert!(db.exists("/a/b/c").is_ok());
+
+        assert!(db.set("/a/b/c", "d", "value").is_ok());
+        assert!(db.get("/a/b/c/d") == Ok("value".into()));
     }
 
     after_each {
