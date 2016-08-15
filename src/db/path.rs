@@ -17,6 +17,11 @@ impl Path {
             parts: parts,
         }
     }
+
+    /// Get the parts that compose the path
+    pub fn parts(&self) -> &Vec<PathPart> {
+        &self.parts
+    }
 }
 
 /// Trait for converting a type to a Path, consuming it in the process.
@@ -32,6 +37,10 @@ impl IntoPath for String {
         // XXX: Will need some work here, it doesn't support any feature
         // XXX: Escape ? Regex ? Globbing ?
         for p in self.split('/') {
+            if p.is_empty() {
+                continue;
+            }
+
             let mut data_part = Vec::new();
 
             data_part.extend(p.as_bytes());
