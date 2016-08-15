@@ -6,7 +6,7 @@ describe! stainless {
 
         let _ = env_logger::init();
 
-        let db = db::Database::new();
+        let mut db = db::Database::new();
     }
 
     it "basic_get" {

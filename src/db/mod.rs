@@ -79,7 +79,7 @@ impl Database {
     /// data: The data corresponding to the key
     ///
     /// return: Ok if the insertion succeeded, Err otherwise
-    pub fn set<T, U>(&self, path: T, key: U, data: U) -> Result<(), ()>
+    pub fn set<T, U>(&mut self, path: T, key: U, data: U) -> Result<(), ()>
                      where T: path::IntoPath, U: Into<Data> {
         let node = try!(self.resolve_path(path));
         let i_node = node.node();
