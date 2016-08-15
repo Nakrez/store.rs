@@ -98,7 +98,7 @@ impl Database {
                 let n_ptr = NodePtr::from_node(node);
 
                 if dir.insert(key, n_ptr).is_some() {
-                    // XXX: Should we assert ? Or print a log ?
+                    warn!("BUG ? set(): insert returned some");
                     Err(())
                 } else {
                     Ok(())

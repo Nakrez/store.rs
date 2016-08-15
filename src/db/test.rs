@@ -1,6 +1,10 @@
 describe! stainless {
     before_each {
+        use env_logger;
+
         use db;
+
+        let _ = env_logger::init();
 
         let db = db::Database::new();
     }
