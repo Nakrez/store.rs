@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["NodeContent","Actual content of the node"]],"struct":[["Node","Internal node of the data base"],["NodePtr","A shareable pointer to a Node"]],"type":[["Data","Internal type of the raw data stored"],["DataRef","A reference over an internal data"],["Directory","Internal type of the external directory"]]});

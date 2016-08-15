@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["PathPart","A part of a Path"]],"struct":[["Path","Represents a path in the database"]],"trait":[["IntoPath","Trait for converting a type to a Path, consuming it in the process."]]});

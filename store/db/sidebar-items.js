@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["data","Definitions of the internal data types"],["path",""]],"struct":[["Database",""]]});
