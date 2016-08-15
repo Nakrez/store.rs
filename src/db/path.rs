@@ -1,4 +1,4 @@
-use db::Data;
+use db::data::Data;
 
 /// A part of a Path
 pub enum PathPart {

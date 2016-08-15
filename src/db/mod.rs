@@ -1,26 +1,24 @@
 //! Actual implementation of the Database
 
-use std::collections::HashMap;
+use self::path::PathPart;
+use self::data::{NodePtr};
 
 #[cfg(test)]
 mod test;
 
+pub mod data;
 pub mod path;
 
-pub type Data = Vec<u8>;
-
-struct Node {
-    data: Data,
-}
-
 pub struct Database {
-    data: HashMap<Data, Node>,
+    root: NodePtr,
 }
 
 impl Database {
-    pub fn new(_root_pwd: Data) -> Self {
+    /// Create a new empty data base
+    #[allow(new_without_default)]
+    pub fn new() -> Database {
         Database {
-            data: HashMap::new(),
+            root: NodePtr::new(),
         }
     }
 

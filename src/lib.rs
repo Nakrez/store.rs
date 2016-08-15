@@ -8,4 +8,4 @@
 #![cfg_attr(test, plugin(stainless))]
 #![plugin(serde_macros)]
 
-mod db;
+pub mod db;
