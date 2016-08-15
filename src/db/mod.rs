@@ -106,4 +106,9 @@ impl Database {
             }
         }
     }
+
+    /// Returns true if a `path` exists.
+    pub fn exists<T: path::IntoPath>(&self, path: T) -> Result<(), ()> {
+        self.resolve_path(path).map(|_| ())
+    }
 }

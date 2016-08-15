@@ -25,6 +25,12 @@ describe! stainless {
         assert!(db.get("/non_exist").is_ok());
     }
 
+    it "basic_exists" {
+        assert!(db.exists("/non_exist").is_err());
+        assert!(db.set("/", "non_exist", "yes").is_ok());
+        assert!(db.exists("/non_exist").is_ok());
+    }
+
     after_each {
     }
 }
